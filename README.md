@@ -1,9 +1,5 @@
 # key-generation
-Generate blobs of random noise for keys
-
-# OneRNG Random Data Generator
-
-Generate 1GB of 256-bit (32-byte) true random data blobs from a [OneRNG](https://onerng.info/) hardware random number generator on a Raspberry Pi 5.
+Generate 1GB of blobs of random noise for keys using OneRNG.
 
 ## Overview
 
