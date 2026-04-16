@@ -12,15 +12,7 @@ This script reads entropy from a OneRNG 3.0 device and generates 33,554,432 indi
 - OneRNG 3.0 hardware RNG
 - USB storage device with at least 1GB free space
 
-## Quick Start
-
-```bash
-wget https://raw.githubusercontent.com/oldh-at/key-generation/refs/heads/main/onerng_generate.sh
-chmod +x onerng_generate.sh
-sudo ./onerng_generate.sh
-```
-
-## Detailed Setup
+## Setup
 
 ### 1. Prepare Your Raspberry Pi
 
