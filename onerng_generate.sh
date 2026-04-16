@@ -203,7 +203,7 @@ generate_blobs() {
             continue
         fi
         
-        # Add to manifest (calculate SHA256 in background for speed)
+        # Add to manifest (calculate SHA256)
         local hash=$(sha256sum "$filepath" | awk '{print $1}')
         echo "$filename $hash" >> "$manifest"
         
@@ -228,7 +228,7 @@ generate_blobs() {
     local total_time=$((end_time - start_time))
     
     log_info "Generation complete!"
-    log_info "Total time: $((total_time/60))m $((total_time%60))s"
+    log_info "Total time: $((total_time/3600))h $((total_time%3600/60))m $((total_time%60))s"
     log_info "Average rate: $((TOTAL_BYTES / (total_time + 1))) bytes/sec"
     log_info "Output directory: $blob_dir"
     log_info "Manifest file: $manifest"
@@ -242,38 +242,6 @@ generate_blobs() {
     echo "Files generated: $actual_count"
     echo "Total size: $((actual_total / 1024 / 1024))MB"
     echo "Location: $blob_dir"
-}
-
-# Alternative: Generate as single file with internal structure
-generate_single_file() {
-    local output_dir="$1"
-    local timestamp=$(date +%Y%m%d_%H%M%S)
-    local output_file="${output_dir}/onerng_random_${timestamp}.bin"
-    
-    log_info "Generating 1GB random data to: $output_file"
-    log_info "This will be a single file containing $TOTAL_BLOBS x 256-bit values..."
-    
-    local start_time=$(date +%s)
-    
-    # Use dd to read directly from OneRNG to file
-    # Read in 4KB chunks for efficiency
-    local chunk_size=4096
-    local total_chunks=$((TOTAL_BYTES / chunk_size))
-    
-    dd if="$ONERNG_DEVICE" of="$output_file" bs=$chunk_size count=$total_chunks status=progress
-    
-    local end_time=$(date +%s)
-    local total_time=$((end_time - start_time))
-    
-    # Generate checksum
-    log_info "Calculating SHA256 checksum..."
-    local checksum=$(sha256sum "$output_file")
-    echo "$checksum" > "${output_file}.sha256"
-    
-    log_info "Generation complete!"
-    log_info "Total time: $((total_time/60))m $((total_time%60))s"
-    log_info "Output file: $output_file"
-    log_info "Checksum file: ${output_file}.sha256"
 }
 
 # Cleanup function
@@ -308,22 +276,9 @@ main() {
     
     check_space "$OUTPUT_DIR"
     
-    # Ask for generation mode
-    echo ""
-    echo "Generation mode:"
-    echo "  1) Individual files (33+ million 32-byte files)"
-    echo "  2) Single 1GB file (faster, easier to handle)"
-    echo ""
-    read -p "Select mode (1 or 2) [2]: " mode
-    mode=${mode:-2}
-    
     trap cleanup EXIT
     
-    if [[ "$mode" == "1" ]]; then
-        generate_blobs "$OUTPUT_DIR"
-    else
-        generate_single_file "$OUTPUT_DIR"
-    fi
+    generate_blobs "$OUTPUT_DIR"
     
     log_info "Done! Safely eject your USB drive before removing."
 }
