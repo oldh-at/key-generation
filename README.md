@@ -1,4 +1,4 @@
-# key-generation
+# Key Generation
 Generate 1GB of blobs of random noise for keys using OneRNG.
 
 ## Overview
