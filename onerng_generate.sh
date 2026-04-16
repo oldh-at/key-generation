@@ -166,18 +166,6 @@ generate_blobs() {
     local count=0
     local errors=0
     
-    # Create a manifest file
-    local manifest="${blob_dir}/manifest.txt"
-    echo "# OneRNG Random Data Generation" > "$manifest"
-    echo "# Generated: $(date)" >> "$manifest"
-    echo "# Device: $ONERNG_DEVICE" >> "$manifest"
-    echo "# Blob size: $BLOB_SIZE bytes (256 bits)" >> "$manifest"
-    echo "# Total blobs: $TOTAL_BLOBS" >> "$manifest"
-    echo "# Total size: $TOTAL_BYTES bytes (1GB)" >> "$manifest"
-    echo "#" >> "$manifest"
-    echo "# Format: filename sha256sum" >> "$manifest"
-    echo "" >> "$manifest"
-    
     # Generate blobs
     while ((count < TOTAL_BLOBS)); do
         # Generate filename with zero-padded number
@@ -203,10 +191,6 @@ generate_blobs() {
             continue
         fi
         
-        # Add to manifest (calculate SHA256)
-        local hash=$(sha256sum "$filepath" | awk '{print $1}')
-        echo "$filename $hash" >> "$manifest"
-        
         ((count++))
         errors=0  # Reset error count on success
         
@@ -231,9 +215,8 @@ generate_blobs() {
     log_info "Total time: $((total_time/3600))h $((total_time%3600/60))m $((total_time%60))s"
     log_info "Average rate: $((TOTAL_BYTES / (total_time + 1))) bytes/sec"
     log_info "Output directory: $blob_dir"
-    log_info "Manifest file: $manifest"
     
-    # Final verification
+    # Final count
     local actual_count=$(ls -1 "${blob_dir}"/blob_*.bin 2>/dev/null | wc -l)
     local actual_total=$((actual_count * BLOB_SIZE))
     
