@@ -48,22 +48,9 @@ Check the device node exists:
 ls -la /dev/ttyACM*
 ```
 
-### 3. Mount Your USB Drive
+### 3. Insert Your USB Drive
 
-Insert your USB storage device and identify it:
-
-```bash
-lsblk
-```
-
-Mount the drive:
-
-```bash
-sudo mkdir -p /mnt/usb
-sudo mount /dev/sda1 /mnt/usb
-```
-
-Replace `/dev/sda1` with your actual device.
+Insert your USB storage device. It will automount.
 
 ### 4. Run the Script
 
