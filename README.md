@@ -3,7 +3,7 @@ Generate 1GB of blobs of random noise for keys using OneRNG.
 
 ## Overview
 
-This script reads entropy from a OneRNG 3.0 device and generates 33,554,432 individual 32-byte files containing true hardware random data, saving them to a removable USB drive.
+This script reads entropy from a OneRNG 3.0 device and generates 1GB of 256-bit files containing true hardware random data, saving them to a removable USB drive.
 
 ## Requirements
 
@@ -26,13 +26,6 @@ Install dependencies:
 
 ```bash
 sudo apt install rng-tools wget -y
-```
-
-Optional: Install the official OneRNG software package:
-
-```bash
-wget https://github.com/OneRNG/onerng.github.io/raw/master/sw/onerng_3.7-1_all.deb
-sudo dpkg -i onerng_3.7-1_all.deb
 ```
 
 ### 2. Connect Your OneRNG
@@ -123,10 +116,6 @@ sudo umount /mnt/usb
 - The OneRNG may need a moment to initialize
 - Try unplugging and replugging the device
 - Check USB cable quality
-
-## License
-
-MIT License. See [LICENSE](LICENSE) for details.
 
 ## Links
 
